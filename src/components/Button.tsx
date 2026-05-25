@@ -1,6 +1,10 @@
-export default function Button({ children, classes }: { children: React.ReactNode, classes: string }) {
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    classes: string
+}
+
+export default function Button({ children, classes, ...props }: ButtonProps) {
     return (
-        <button className={classes}>
+        <button className={classes} {...props}>
             {children}
         </button>
     )

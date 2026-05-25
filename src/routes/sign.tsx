@@ -11,7 +11,7 @@ function RouteComponent() {
   return (
   <div className='flex h-screen w-screen flex-col items-center justify-center bg-black'>
     {/* <h1 className='text-white'>Hello world</h1> */}
-    <Form>
+    <Form width="w-lg">
       <h1 className='flex flex-row justify-center text-4xl m-10 text-white'>Hello world</h1>
       <Input desc="Test"/>
       <Input desc="Test"/>
