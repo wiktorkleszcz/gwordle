@@ -11,16 +11,17 @@ export const Route = createFileRoute('/game')({
   component: RouteComponent,
 })
 
-const defaultRowCount = 6
 const minRowCount = 0
 const maxRowCount = 6
-const wordLength = 5
+const minLettersNum=0
+const maxLettersNum=8
 type GameMode = 'manual' | 'auto'
 
 function RouteComponent() {
-  const [rowCount, setRowCount] = useState(defaultRowCount)
-  const [guesses, setGuesses] = useState(() => Array<string>(defaultRowCount).fill(''))
+  const [rowCount, setRowCount] = useState(6)
+  const [guesses, setGuesses] = useState(() => Array<string>(6).fill(''))
   const [activeRow, setActiveRow] = useState(0)
+  const [lettersNum, setLettersNum] = useState(5)
   const [gameMode, setGameMode] = useState<GameMode>('manual')
   const boardRef = useRef<HTMLDivElement>(null)
 
@@ -56,7 +57,7 @@ function RouteComponent() {
       return
     }
 
-    if (!/^[a-z]$/i.test(event.key) || guesses[activeRow].length >= wordLength) {
+    if (!/^[a-z]$/i.test(event.key) || guesses[activeRow].length >= lettersNum) {
       return
     }
 
@@ -66,7 +67,7 @@ function RouteComponent() {
       const nextGuess = `${nextGuesses[activeRow]}${event.key.toUpperCase()}`
       nextGuesses[activeRow] = nextGuess
 
-      if (nextGuess.length === wordLength && activeRow < rowCount - 1) {
+      if (nextGuess.length === lettersNum && activeRow < rowCount - 1) {
         setActiveRow(activeRow + 1)
       }
 
@@ -93,6 +94,13 @@ function RouteComponent() {
     setActiveRow((currentActiveRow) => Math.max(0, Math.min(currentActiveRow, nextRowCount - 1)))
   }
 
+  function handleLengthChange(value: string) {
+    const valueAsNumber = Number(value)
+    const nextLength = Number.isNaN(valueAsNumber) ? minLettersNum : Math.min(maxLettersNum, Math.max(minLettersNum, valueAsNumber))
+
+    setLettersNum(nextLength)
+  }
+
   return (
   <div className="relative flex h-screen flex-col bg-gradient-to-br from-black via-black via-65% to-green-500">
     <Header>
@@ -103,9 +111,10 @@ function RouteComponent() {
     </Header>
     <div className="flex flex-row items-center justify-center h-full m-4 gap-6">
       <Form width="w-2xs">
+        <Input type="text" desc="Stake"/>
         <div className='flex flex-row justify-between gap-6 my-3'>
             <Input type="number" desc="Tries" min={minRowCount} max={maxRowCount} value={rowCount} onChange={(event) => handleRowCountChange(event.target.value)}/>
-            <Input type="number" desc="Stake"/>
+            <Input type="number" desc="Word length" min={minLettersNum} max={maxLettersNum} value={lettersNum} onChange={(event) => handleLengthChange(event.target.value)}/>
         </div>
         <div className='flex flex-row justify-center my-3'>
             <Button type="button" classes={`${gameMode === 'manual' ? 'bg-green-500' : 'bg-stone-800'} text-white p-3 min-w-24 transition-colors rounded-tl-md rounded-bl-md`} onClick={() => setGameMode('manual')}>Manual</Button>
@@ -119,7 +128,7 @@ function RouteComponent() {
         onKeyDown={handleBoardKeyDown}
         className="outline-none"
       >
-        <Board rows={guesses} activeRow={activeRow} onRowClick={focusRow} />
+        <Board rows={guesses} activeRow={activeRow} onRowClick={focusRow} lettersNum={lettersNum} />
       </div>
     </div>
   </div>

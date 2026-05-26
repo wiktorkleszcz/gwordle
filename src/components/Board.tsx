@@ -4,9 +4,10 @@ type BoardProps = {
     rows: string[]
     activeRow: number
     onRowClick: (rowIndex: number) => void
+    lettersNum: number
 }
 
-export default function Board({ rows, activeRow, onRowClick }: BoardProps) {
+export default function Board({ rows, activeRow, onRowClick, lettersNum }: BoardProps) {
     return (
         <div className="flex flex-col gap-6 justify-center items-center h-180 w-180 bg-stone-900 rounded-2xl">
             {rows.map((letters, index) => (
@@ -15,6 +16,7 @@ export default function Board({ rows, activeRow, onRowClick }: BoardProps) {
                     letters={letters}
                     isActive={activeRow === index}
                     onCellClick={() => onRowClick(index)}
+                    lettersNum={lettersNum}
                 />
             ))}
         </div>
