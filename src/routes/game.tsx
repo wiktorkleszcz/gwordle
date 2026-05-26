@@ -1,136 +1,40 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { useRef, useState, type KeyboardEvent } from 'react'
-import Header from '#/components/Header'
-import Button from '#/components/Button'
-import Input from '#/components/Input'
 import Form from '#/components/Form'
-import logo from '../../public/a680dd9e-bc1e-406b-a61b-a4e7521f9721.png'
-import Board from '#/components/Board'
+import Header from '#/components/Header'
+import Input from '#/components/Input'
+import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/game')({
   component: RouteComponent,
 })
 
-const minRowCount = 0
-const maxRowCount = 6
-const minLettersNum=0
-const maxLettersNum=8
-type GameMode = 'manual' | 'auto'
-
 function RouteComponent() {
-  const [rowCount, setRowCount] = useState(6)
-  const [guesses, setGuesses] = useState(() => Array<string>(6).fill(''))
-  const [activeRow, setActiveRow] = useState(0)
-  const [lettersNum, setLettersNum] = useState(5)
-  const [gameMode, setGameMode] = useState<GameMode>('manual')
-  const boardRef = useRef<HTMLDivElement>(null)
-
-  function focusRow(rowIndex: number) {
-    setActiveRow(rowIndex)
-    requestAnimationFrame(() => boardRef.current?.focus())
-  }
-
-  function handleBoardKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-    if (rowCount === 0) {
-      return
-    }
-
-    if (event.key === 'Backspace') {
-      event.preventDefault()
-      setGuesses((currentGuesses) => {
-        const nextGuesses = [...currentGuesses]
-
-        if (nextGuesses[activeRow].length > 0) {
-          nextGuesses[activeRow] = nextGuesses[activeRow].slice(0, -1)
-          return nextGuesses
-        }
-
-        if (activeRow > 0) {
-          const previousRow = activeRow - 1
-          nextGuesses[previousRow] = nextGuesses[previousRow].slice(0, -1)
-          setActiveRow(previousRow)
-          requestAnimationFrame(() => boardRef.current?.focus())
-        }
-
-        return nextGuesses
-      })
-      return
-    }
-
-    if (!/^[a-z]$/i.test(event.key) || guesses[activeRow].length >= lettersNum) {
-      return
-    }
-
-    event.preventDefault()
-    setGuesses((currentGuesses) => {
-      const nextGuesses = [...currentGuesses]
-      const nextGuess = `${nextGuesses[activeRow]}${event.key.toUpperCase()}`
-      nextGuesses[activeRow] = nextGuess
-
-      if (nextGuess.length === lettersNum && activeRow < rowCount - 1) {
-        setActiveRow(activeRow + 1)
-      }
-
-      return nextGuesses
-    })
-  }
-
-  function handleRowCountChange(value: string) {
-    const valueAsNumber = Number(value)
-    const nextRowCount = Number.isNaN(valueAsNumber)
-      ? minRowCount
-      : Math.min(maxRowCount, Math.max(minRowCount, valueAsNumber))
-
-    setRowCount(nextRowCount)
-    setGuesses((currentGuesses) => {
-      const nextGuesses = Array<string>(nextRowCount).fill('')
-
-      currentGuesses.slice(0, nextRowCount).forEach((guess, index) => {
-        nextGuesses[index] = guess
-      })
-
-      return nextGuesses
-    })
-    setActiveRow((currentActiveRow) => Math.max(0, Math.min(currentActiveRow, nextRowCount - 1)))
-  }
-
-  function handleLengthChange(value: string) {
-    const valueAsNumber = Number(value)
-    const nextLength = Number.isNaN(valueAsNumber) ? minLettersNum : Math.min(maxLettersNum, Math.max(minLettersNum, valueAsNumber))
-
-    setLettersNum(nextLength)
-  }
-
   return (
-  <div className="relative flex h-screen flex-col bg-gradient-to-br from-black via-black via-65% to-green-500">
-    <Header>
-      <Link to="/" className="absolute left-4">
-        <Button classes="bg-stone-900 text-white p-3 rounded-md min-w-24 hover:bg-green-500 transition-colors">Home</Button>
-      </Link>
-      <img src={logo} alt="Logo" className="h-10 w-auto" />
-    </Header>
-    <div className="flex flex-row items-center justify-center h-full m-4 gap-6">
-      <Form width="w-2xs">
-        <Input type="text" desc="Stake"/>
-        <div className='flex flex-row justify-between gap-6 my-3'>
-            <Input type="number" desc="Tries" min={minRowCount} max={maxRowCount} value={rowCount} onChange={(event) => handleRowCountChange(event.target.value)}/>
-            <Input type="number" desc="Word length" min={minLettersNum} max={maxLettersNum} value={lettersNum} onChange={(event) => handleLengthChange(event.target.value)}/>
-        </div>
-        <div className='flex flex-row justify-center my-3'>
-            <Button type="button" classes={`${gameMode === 'manual' ? 'bg-green-500' : 'bg-stone-800'} text-white p-3 min-w-24 transition-colors rounded-tl-md rounded-bl-md`} onClick={() => setGameMode('manual')}>Manual</Button>
-            <Button type="button" classes={`${gameMode === 'auto' ? 'bg-green-500' : 'bg-stone-800'} text-white p-3 min-w-24 transition-colors rounded-tr-md rounded-br-md`} onClick={() => setGameMode('auto')}>Auto</Button>
-        </div>
-        <Button type="button" classes="bg-stone-800 text-white p-3 rounded-md min-w-24 hover:bg-green-500 transition-colors">Submit</Button>
-      </Form>
-      <div
-        ref={boardRef}
-        tabIndex={0}
-        onKeyDown={handleBoardKeyDown}
-        className="outline-none"
-      >
-        <Board rows={guesses} activeRow={activeRow} onRowClick={focusRow} lettersNum={lettersNum} />
-      </div>
+    <div className='flex flex-col gap-2 bg-gradient-to-br from-black via-black to-green-500 w-screen h-screen overflow-hidden'>
+        <Header link='/'/>
+        <main className='flex flex-row justify-center items-center h-full'>
+            <Form width='w-80'>
+            <h1 className='flex flex-row justify-center text-white text-3xl'>Let's Play!</h1>
+            <Input type='number' desc='Stake'/>
+            <div className='flex flex-row gap-2'>
+                <Input type='number' desc='Lenght'/>
+                <Input type='number' desc='Tries'/>
+            </div>
+            <div className='flex flex-col items-between gap-2'>
+                <label className='text-white'>Profit/Lose Graph</label>
+                <div className='bg-black h-68 w-68 rounded-md flex flex-row justify-center items-center'>
+                    <p className='text-white'>There will be sumn. WIP</p>
+                </div>
+            </div>
+            <div className='flex flex-col items-between gap-2'>
+                <label className='text-white'>Manual/Auto</label>
+                <div className='flex flex-row justify-center'>
+                    <button className='bg-black hover:bg-stone-900 text-white p-3 rounded-bl-md rounded-tl-md min-w-24 transition-colors w-full'>Manual</button>
+                    <button className='bg-black hover:bg-stone-900 text-white p-3 rounded-br-md rounded-tr-md min-w-24 transition-colors w-full'>Autoplay</button>
+                </div>
+            </div>
+
+            </Form>
+        </main>
     </div>
-  </div>
   )
 }
