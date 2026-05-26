@@ -2,12 +2,13 @@ type RowProps = {
     letters: string
     isActive: boolean
     onCellClick: () => void
+    lettersNum: number
 }
 
-export default function Row({ letters, isActive, onCellClick }: RowProps) {
+export default function Row({ letters, isActive, onCellClick, lettersNum }: RowProps) {
     return (
         <div className="flex flex-row gap-2 justify-evenly items-center">
-            {Array.from({ length: 5 }).map((_, index) => (
+            {Array.from({ length: lettersNum }).map((_, index) => (
                 <button
                     key={index}
                     type="button"
