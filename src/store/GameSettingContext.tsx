@@ -1,4 +1,4 @@
-import { log } from "console";
+
 import { createContext, useContext, useReducer, type ReactNode, type Dispatch } from "react";
 
 export type GameState = {
@@ -29,16 +29,12 @@ const initialGameState: GameState = {
 function gameReducer(state: GameState, action: GameAction): GameState {
     switch (action.type) {
       case 'setStake':
-        log("stake has changed")
         return { ...state, stake: action.value }
       case 'setLength':
-        log("length has changed")
         return { ...state, length: action.value }
       case 'setTries':
-        log("tires has changed")
         return { ...state, tries: action.value }
       case 'setMode':
-        log("mode has changed")
         return { ...state, mode: action.value }
       default:
         return state
