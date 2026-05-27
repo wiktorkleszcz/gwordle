@@ -1,3 +1,4 @@
+// Button keeps button styling reusable while still accepting normal button props.
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
     classes: string
 }

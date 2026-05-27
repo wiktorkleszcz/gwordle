@@ -1,7 +1,8 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import Header  from '#/components/Header'
 import { useState } from 'react'
 
+// Home route is the landing page and changes its gradient when the header button is hovered.
 export const Route = createFileRoute('/')({ component: Home })
 
 function Home() {

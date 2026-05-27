@@ -3,6 +3,7 @@ import Form from '#/components/Form'
 import Input from '#/components/Input'
 import Button from '#/components/Button'
 
+// Sign route is a placeholder form screen with navigation into home or game.
 export const Route = createFileRoute('/sign')({
   component: RouteComponent,
 })

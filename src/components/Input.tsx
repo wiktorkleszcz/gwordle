@@ -1,3 +1,4 @@
+// Input wraps a normal HTML input with an optional label and shared styling.
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
     desc?: string
 }
@@ -5,7 +6,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 export default function Input({desc, ...props}: InputProps) {
     return (
         <p className="flex flex-col gap-1 w-full">
-            {desc && <label htmlFor="" className="text-white">{desc}</label>}
+            {desc && <label className="text-white">{desc}</label>}
             <input className="w-full text-white text-2xl bg-black p-2 rounded-md" {...props} />
         </p>
     )

@@ -1,8 +1,10 @@
-import Form from '#/components/Form'
+import Board from '#/components/Board'
 import Header from '#/components/Header'
-import Input from '#/components/Input'
 import { createFileRoute } from '@tanstack/react-router'
+import { GameSettingProvider} from '#/store/GameSettingContext'
+import Actions from '#/components/Actions'
 
+// Game route connects the settings panel and board through GameSettingProvider.
 export const Route = createFileRoute('/game')({
   component: RouteComponent,
 })
@@ -11,29 +13,12 @@ function RouteComponent() {
   return (
     <div className='flex flex-col gap-2 bg-gradient-to-br from-black via-black to-green-500 w-screen h-screen overflow-hidden'>
         <Header link='/'/>
-        <main className='flex flex-row justify-center items-center h-full'>
-            <Form width='w-80'>
-            <h1 className='flex flex-row justify-center text-white text-3xl'>Let's Play!</h1>
-            <Input type='number' desc='Stake'/>
-            <div className='flex flex-row gap-2'>
-                <Input type='number' desc='Lenght'/>
-                <Input type='number' desc='Tries'/>
-            </div>
-            <div className='flex flex-col items-between gap-2'>
-                <label className='text-white'>Profit/Lose Graph</label>
-                <div className='bg-black h-68 w-68 rounded-md flex flex-row justify-center items-center'>
-                    <p className='text-white'>There will be sumn. WIP</p>
-                </div>
-            </div>
-            <div className='flex flex-col items-between gap-2'>
-                <label className='text-white'>Manual/Auto</label>
-                <div className='flex flex-row justify-center'>
-                    <button className='bg-black hover:bg-stone-900 text-white p-3 rounded-bl-md rounded-tl-md min-w-24 transition-colors w-full'>Manual</button>
-                    <button className='bg-black hover:bg-stone-900 text-white p-3 rounded-br-md rounded-tr-md min-w-24 transition-colors w-full'>Autoplay</button>
-                </div>
-            </div>
-
-            </Form>
+        <main className='flex flex-row justify-center items-center h-full gap-2'>
+          {/* Actions and Board share the same settings context here. */}
+          <GameSettingProvider>
+            <Actions />
+            <Board />
+          </GameSettingProvider>
         </main>
     </div>
   )

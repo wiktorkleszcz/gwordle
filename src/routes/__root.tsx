@@ -4,6 +4,7 @@ import { Outlet, createRootRoute } from '@tanstack/react-router'
 
 import '../styles.css'
 
+// Root route loads global styles and renders whichever child route is active.
 export const Route = createRootRoute({
   component: RootComponent,
 })
