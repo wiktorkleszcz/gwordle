@@ -1,15 +1,29 @@
 import Input from "./Input";
-import { useGameSettings } from "../store/gameSettingContext";
+import { useGameSettings } from "#/store/GameSettingContext";
+import Slider from "./Slider";
 
 export default function Actions() {
     const {gameState, gameStateDispatch} = useGameSettings();
+
     return (
         <div className='flex flex-col justify-between content-center p-6 bg-stone-800 w-80 gap-2 rounded-2xl'>
             <h1 className='flex flex-row justify-center text-white text-3xl'>Let's Play!</h1>
             <Input type='number' desc='Stake' onChange={(event)=> gameStateDispatch({type: 'setStake', value: Number(event.target.value)})}/>
             <div className='flex flex-row gap-2'>
-                <Input type='number' desc='Length' onChange={(event)=> gameStateDispatch({type: 'setLength', value: Number(event.target.value)})}/>
-                <Input type='number' desc='Tries'onChange={(event)=> gameStateDispatch({type: 'setTries', value: Number(event.target.value)})}/>
+                <Slider
+                  desc='Length'
+                  min={3}
+                  max={8}
+                  value={gameState.length}
+                  handleChange={(value) => gameStateDispatch({type: 'setLength', value})}
+                />
+                <Slider
+                  desc='Tries'
+                  min={1}
+                  max={6}
+                  value={gameState.tries}
+                  handleChange={(value) => gameStateDispatch({type: 'setTries', value})}
+                />
             </div>
             <div className='flex flex-col items-between gap-2'>
                 <label className='text-white'>Profit/Lose Graph</label>
