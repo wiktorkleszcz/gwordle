@@ -1,9 +1,7 @@
 import Board from '#/components/Board'
-import Form from '#/components/Form'
 import Header from '#/components/Header'
-import Input from '#/components/Input'
 import { createFileRoute } from '@tanstack/react-router'
-import { GameSettingProvider, useGameSettings } from '#/store/gameSettingContext'
+import { GameSettingProvider} from '#/store/gameSettingContext'
 import Actions from '#/components/Actions'
 
 export const Route = createFileRoute('/game')({
