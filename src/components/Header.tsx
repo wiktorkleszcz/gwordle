@@ -1,4 +1,4 @@
-import logo from '#/../public/a680dd9e-bc1e-406b-a61b-a4e7521f9721.png'
+import logo from '#/img/a680dd9e-bc1e-406b-a61b-a4e7521f9721.png'
 import Button from '#/components/Button'
 import { Link } from '@tanstack/react-router'
 
