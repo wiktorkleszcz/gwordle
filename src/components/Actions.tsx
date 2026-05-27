@@ -2,6 +2,7 @@ import Input from "./Input";
 import { useGameSettings } from "#/store/GameSettingContext";
 import Slider from "./Slider";
 
+// Actions renders the game settings panel and dispatches changes to shared game settings.
 export default function Actions() {
     const {gameState, gameStateDispatch} = useGameSettings();
 
@@ -10,6 +11,7 @@ export default function Actions() {
             <h1 className='flex flex-row justify-center text-white text-3xl'>Let's Play!</h1>
             <Input type='number' desc='Stake' onChange={(event)=> gameStateDispatch({type: 'setStake', value: Number(event.target.value)})}/>
             <div className='flex flex-row gap-2'>
+                {/* Sliders update the board dimensions through the context reducer. */}
                 <Slider
                   desc='Length'
                   min={3}
@@ -34,16 +36,17 @@ export default function Actions() {
             <div className='flex flex-col items-between gap-2'>
                 <label className='text-white'>Manual/Auto</label>
                 <div className='flex flex-row justify-center'>
+                    {/* Buttons use type="button" so they do not submit a parent form. */}
                     <button 
                       type='button'
-                      className={`${gameState.mode === "manual" ? "bg-green-500" : "bg-black"} hover:bg-stone-900 text-white p-3 rounded-bl-md rounded-tl-md min-w-24 transition-colors w-full`}
+                      className={`${gameState.mode === "manual" ? "bg-green-500" : "bg-black hover:bg-stone-900" } text-white p-3 rounded-bl-md rounded-tl-md min-w-24 transition-colors w-full`}
                       onClick={() => gameStateDispatch({type: 'setMode', value: 'manual'})}
                       >
                         Manual
                       </button>
                     <button 
                       type='button'
-                      className={`${gameState.mode === "auto" ? "bg-green-500" : "bg-black"} hover:bg-stone-900 text-white p-3 rounded-br-md rounded-tr-md min-w-24 transition-colors w-full`}
+                      className={`${gameState.mode === "auto" ? "bg-green-500" : "bg-black  hover:bg-stone-900"} text-white p-3 rounded-br-md rounded-tr-md min-w-24 transition-colors w-full`}
                       onClick={() => gameStateDispatch({type: 'setMode', value: 'auto'})}
                       >
                         Autoplay

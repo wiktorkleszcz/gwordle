@@ -1,3 +1,4 @@
+// Slider is a controlled range input used for numeric game settings.
 type SliderType = {
     desc?: string,
     min: number,

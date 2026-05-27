@@ -1,3 +1,4 @@
+// Input wraps a normal HTML input with an optional label and shared styling.
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
     desc?: string
 }

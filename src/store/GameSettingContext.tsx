@@ -1,6 +1,6 @@
-
 import { createContext, useContext, useReducer, type ReactNode, type Dispatch } from "react";
 
+// This context stores settings shared by the controls panel and the board.
 export type GameState = {
     stake: number,
     length: number,
@@ -19,6 +19,7 @@ type GameSettingContextType = {
     gameStateDispatch: Dispatch<GameAction>
 }
 
+// Initial settings decide the first board size and selected play mode.
 const initialGameState: GameState = {
     stake: 0,
     length: 5,
@@ -26,6 +27,7 @@ const initialGameState: GameState = {
     mode: 'manual',
 }
 
+// Reducer is the only place where game settings are changed.
 function gameReducer(state: GameState, action: GameAction): GameState {
     switch (action.type) {
       case 'setStake':
@@ -43,6 +45,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
 const GameSettingContext = createContext<GameSettingContextType | null>(null)
 
+// Provider makes game settings available to every component inside the game route.
 export function GameSettingProvider({ children }: {children: ReactNode}) {
     const [gameState, gameStateDispatch] = useReducer(gameReducer, initialGameState)
 
@@ -53,6 +56,7 @@ export function GameSettingProvider({ children }: {children: ReactNode}) {
     )
 }
 
+// Hook gives components safe access to the settings context.
 export function useGameSettings() {
     const context = useContext(GameSettingContext)
 
