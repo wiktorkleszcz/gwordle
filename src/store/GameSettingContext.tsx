@@ -16,7 +16,7 @@ export type GameAction =
 
 export const STAKE_LIMITS = {
     min: 0,
-    max: 100,
+    max: 100000,
 }
 
 type GameSettingContextType = {
@@ -32,6 +32,7 @@ const initialGameState: GameState = {
     mode: 'manual',
 }
 
+// Keep stake inside the allowed range even if the input sends a bad number.
 function clampStake(value: number) {
     if (!Number.isFinite(value)) {
         return STAKE_LIMITS.min

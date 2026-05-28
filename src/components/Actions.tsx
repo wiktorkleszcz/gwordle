@@ -12,6 +12,7 @@ export default function Actions() {
             <Input
               min={STAKE_LIMITS.min}
               max={STAKE_LIMITS.max}
+              // Show an empty field for zero so the user does not type after a leading 0.
               value={gameState.stake === 0 ? '' : gameState.stake}
               type='number'
               desc='Stake'
@@ -60,6 +61,8 @@ export default function Actions() {
                       </button>
                 </div>
             </div>
+            <label className="text-white">Play</label>
+            <button className="text-white p-3 rounded-md min-w-24 transition-colors w-full bg-black hover:bg-stone-900">Play!</button>
             </div>
     )
 }
