@@ -1,5 +1,5 @@
 import Input from "./Input";
-import { useGameSettings } from "#/store/GameSettingContext";
+import { STAKE_LIMITS, useGameSettings } from "#/store/GameSettingContext";
 import Slider from "./Slider";
 
 // Actions renders the game settings panel and dispatches changes to shared game settings.
@@ -9,7 +9,15 @@ export default function Actions() {
     return (
         <div className='flex flex-col justify-between content-center p-6 bg-stone-800 w-80 gap-2 rounded-2xl'>
             <h1 className='flex flex-row justify-center text-white text-3xl'>Let's Play!</h1>
-            <Input type='number' desc='Stake' onChange={(event)=> gameStateDispatch({type: 'setStake', value: Number(event.target.value)})}/>
+            <Input
+              min={STAKE_LIMITS.min}
+              max={STAKE_LIMITS.max}
+              // Show an empty field for zero so the user does not type after a leading 0.
+              value={gameState.stake === 0 ? '' : gameState.stake}
+              type='number'
+              desc='Stake'
+              onChange={(event)=> gameStateDispatch({type: 'setStake', value: Number(event.target.value)})}
+            />
             <div className='flex flex-row gap-2'>
                 {/* Sliders update the board dimensions through the context reducer. */}
                 <Slider
@@ -53,6 +61,8 @@ export default function Actions() {
                       </button>
                 </div>
             </div>
+            <label className="text-white">Play</label>
+            <button className="text-white p-3 rounded-md min-w-24 transition-colors w-full bg-black hover:bg-stone-900">Play!</button>
             </div>
     )
 }
