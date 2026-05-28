@@ -14,6 +14,11 @@ export type GameAction =
 | {type: 'setTries'; value: number}
 | {type: 'setMode'; value: GameState['mode']}
 
+export const STAKE_LIMITS = {
+    min: 0,
+    max: 100,
+}
+
 type GameSettingContextType = {
     gameState: GameState
     gameStateDispatch: Dispatch<GameAction>
@@ -27,11 +32,19 @@ const initialGameState: GameState = {
     mode: 'manual',
 }
 
+function clampStake(value: number) {
+    if (!Number.isFinite(value)) {
+        return STAKE_LIMITS.min
+    }
+
+    return Math.min(Math.max(value, STAKE_LIMITS.min), STAKE_LIMITS.max)
+}
+
 // Reducer is the only place where game settings are changed.
 function gameReducer(state: GameState, action: GameAction): GameState {
     switch (action.type) {
       case 'setStake':
-        return { ...state, stake: action.value }
+        return { ...state, stake: clampStake(action.value) }
       case 'setLength':
         return { ...state, length: action.value }
       case 'setTries':
@@ -41,6 +54,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       default:
         return state
     } 
+
+    return state
 }
 
 const GameSettingContext = createContext<GameSettingContextType | null>(null)
