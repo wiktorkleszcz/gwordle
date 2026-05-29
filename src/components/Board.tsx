@@ -1,6 +1,7 @@
 import { useGameSettings } from "#/store/GameSettingContext";
 import { useBoard } from "#/store/BoardContext";
-import { useRef } from "react";
+import { computeTileMultipliers } from "#/game/tileMultipliers";
+import { useMemo, useRef } from "react";
 import Row from "./Row";
 import SolutionRow from "./SolutionRow";
 
@@ -14,6 +15,13 @@ export default function Board() {
 
     const { length, tries } = gameState
     const locked = board.phase === 'result'
+
+    // Per-tile multipliers are derived from the letters (with duplicate
+    // de-duplication), not stored, so they recompute only when letters change.
+    const multipliers = useMemo(
+        () => computeTileMultipliers(board.letters, length),
+        [board.letters, length]
+    )
 
     // One keyboard handler controls letters, deleting, row changes, and arrows.
     function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
@@ -97,6 +105,7 @@ export default function Board() {
                     key={i}
                     letters={row}
                     statuses={board.statuses[i]}
+                    multipliers={multipliers[i]}
                     // Hide the cursor while locked so nothing looks editable.
                     activeCol={!locked && position.row === i ? position.col : null}
                     onTileClick={(col) => {

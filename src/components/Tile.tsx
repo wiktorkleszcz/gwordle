@@ -1,11 +1,14 @@
 import type { LetterStatus } from "#/store/BoardContext"
+import Multiplier from "./Multiplier"
 
 // Tile is a presentational square: it displays a letter, colors itself by its
-// check status, and highlights when it is the active tile.
+// check status, highlights when active, and shows its potential multiplier.
 type TileProps = {
     value: string
     status: LetterStatus | null
     active: boolean
+    // null = nothing to show (empty tile); a number renders the odds badge.
+    multiplier: number | null
     onClick: () => void
 }
 
@@ -16,15 +19,18 @@ const STATUS_CLASS: Record<LetterStatus, string> = {
     absent: "bg-stone-700",
 }
 
-export default function Tile({value, status, active, onClick}: TileProps) {
+export default function Tile({value, status, active, multiplier, onClick}: TileProps) {
     const background = status ? STATUS_CLASS[status] : "bg-stone-900"
 
     return (
         <div 
-            className={`flex flex-col justify-center items-center w-22 h-22 rounded-xl text-6xl text-white cursor-pointer ${background} ${active ? "outline-2 outline-offset-2 outline-green-500" : ""}`}
+            className={`relative flex flex-col justify-center items-center w-22 h-22 rounded-xl text-6xl text-white cursor-pointer ${background} ${active ? "outline-2 outline-offset-2 outline-green-500" : ""}`}
             onClick={onClick}
         >
             {value}
+            {multiplier !== null && (
+                <Multiplier value={multiplier} className="absolute bottom-1 right-1.5 text-xs text-white/80" />
+            )}
         </div>
     )
 }

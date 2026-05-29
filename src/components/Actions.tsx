@@ -1,7 +1,9 @@
 import Input from "./Input";
 import { STAKE_LIMITS, useGameSettings } from "#/store/GameSettingContext";
 import { canSubmit, useBoard } from "#/store/BoardContext";
+import { lengthMultiplier, triesMultiplier } from "#/game/multipliers";
 import Slider from "./Slider";
+import Multiplier from "./Multiplier";
 
 // Actions renders the game settings panel and dispatches changes to shared game settings.
 export default function Actions() {
@@ -36,21 +38,31 @@ export default function Actions() {
               onChange={(event)=> gameStateDispatch({type: 'setStake', value: Number(event.target.value)})}
             />
             <div className='flex flex-row gap-2'>
-                {/* Sliders update the board dimensions through the context reducer. */}
-                <Slider
-                  desc='Length'
-                  min={3}
-                  max={8}
-                  value={gameState.length}
-                  handleChange={(value) => gameStateDispatch({type: 'setLength', value})}
-                />
-                <Slider
-                  desc='Tries'
-                  min={1}
-                  max={6}
-                  value={gameState.tries}
-                  handleChange={(value) => gameStateDispatch({type: 'setTries', value})}
-                />
+                {/* Sliders update the board dimensions; each shows its multiplier. */}
+                <div className='flex flex-col w-full'>
+                    <Slider
+                      desc='Length'
+                      min={3}
+                      max={8}
+                      value={gameState.length}
+                      handleChange={(value) => gameStateDispatch({type: 'setLength', value})}
+                    />
+                    <span className='text-white/70 text-sm'>
+                        Mult: <Multiplier value={lengthMultiplier(gameState.length)} />
+                    </span>
+                </div>
+                <div className='flex flex-col w-full'>
+                    <Slider
+                      desc='Tries'
+                      min={1}
+                      max={6}
+                      value={gameState.tries}
+                      handleChange={(value) => gameStateDispatch({type: 'setTries', value})}
+                    />
+                    <span className='text-white/70 text-sm'>
+                        Mult: <Multiplier value={triesMultiplier(gameState.tries)} />
+                    </span>
+                </div>
             </div>
             <div className='flex flex-col items-between gap-2'>
                 <label className='text-white'>Profit/Lose Graph</label>

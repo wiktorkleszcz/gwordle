@@ -8,7 +8,7 @@ import {
     type Dispatch,
 } from "react";
 import { useGameSettings } from "#/store/GameSettingContext";
-import { pickWord } from "#/store/wordBank";
+import { pickWord } from "#/game/wordBank";
 
 // This context owns the actual game grid: the typed letters, the per-tile
 // check results, and the cursor. The grid SIZE (length/tries) is not stored
