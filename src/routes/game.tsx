@@ -2,6 +2,7 @@ import Board from '#/components/Board'
 import Header from '#/components/Header'
 import { createFileRoute } from '@tanstack/react-router'
 import { GameSettingProvider} from '#/store/GameSettingContext'
+import { BoardProvider } from '#/store/BoardContext'
 import Actions from '#/components/Actions'
 import { useState } from 'react'
 
@@ -17,9 +18,12 @@ function RouteComponent() {
         <Header link='/' onHover={setIsHovered}/>
         <main className='flex flex-row justify-center items-center h-full gap-2'>
           {/* Actions and Board share the same settings context here. */}
+          {/* BoardProvider sits inside GameSettingProvider so it can read the grid size. */}
           <GameSettingProvider>
-            <Actions />
-            <Board />
+            <BoardProvider>
+              <Actions />
+              <Board />
+            </BoardProvider>
           </GameSettingProvider>
         </main>
     </div>
