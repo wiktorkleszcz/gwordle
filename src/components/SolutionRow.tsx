@@ -29,7 +29,7 @@ export default function SolutionRow({ solution, length, phase }: SolutionRowProp
         <div className="flex flex-row gap-2 justify-evenly items-center">
             {tiles.map((value, i) => (
                 // Solution tiles are display-only: no status, no odds, never active.
-                <Tile key={i} value={value} status={null} multiplier={null} active={false} onClick={() => {}} />
+                <Tile key={i} value={value} status={null} multiplier={null} active={false} solution={true} onClick={() => {}} />
             ))}
         </div>
     )

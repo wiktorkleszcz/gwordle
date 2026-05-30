@@ -1,7 +1,6 @@
 import { useGameSettings } from "#/store/GameSettingContext";
 import { useBoard } from "#/store/BoardContext";
-import { computeTileMultipliers } from "#/game/tileMultipliers";
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import Row from "./Row";
 import SolutionRow from "./SolutionRow";
 
@@ -10,7 +9,7 @@ import SolutionRow from "./SolutionRow";
 // comes from the settings context.
 export default function Board() {
     const { gameState } = useGameSettings()
-    const { board, boardDispatch, position, positionDispatch, submit, reset } = useBoard()
+    const { board, boardDispatch, position, positionDispatch, submit, reset, multipliers, finalMultiplier } = useBoard()
     const boardRef = useRef<HTMLDivElement>(null)
 
     const { length, tries } = gameState
@@ -18,10 +17,6 @@ export default function Board() {
 
     // Per-tile multipliers are derived from the letters (with duplicate
     // de-duplication), not stored, so they recompute only when letters change.
-    const multipliers = useMemo(
-        () => computeTileMultipliers(board.letters, length),
-        [board.letters, length]
-    )
 
     // One keyboard handler controls letters, deleting, row changes, and arrows.
     function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
@@ -119,6 +114,7 @@ export default function Board() {
             ))}
             {/* The solution sits under the grid: "?" while typing, revealed on result. */}
             <SolutionRow solution={board.solution} length={length} phase={board.phase} />
+            <p className="text-white text-2xl">Final multiplier equals: {finalMultiplier}</p>
             </div>
         </div>
     )

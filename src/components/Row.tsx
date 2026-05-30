@@ -20,6 +20,7 @@ export default function Row({letters, statuses, multipliers, activeCol, onTileCl
                     status={statuses[i]}
                     multiplier={multipliers[i]}
                     active={activeCol === i}
+                    solution={false}
                     // Tell the board which column was clicked; the board owns active position.
                     onClick={() => onTileClick(i)}
                 />

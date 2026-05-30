@@ -17,6 +17,7 @@ export default function Slider({desc, min, max, value, handleChange}: SliderType
                 value={value}
                 type='range'
                 onChange={(e) => handleChange(Number(e.target.value))}
+                className="accent-green-500"
             />
         </label>
     )

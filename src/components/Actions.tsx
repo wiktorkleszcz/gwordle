@@ -67,7 +67,7 @@ export default function Actions() {
             <div className='flex flex-col items-between gap-2'>
                 <label className='text-white'>Profit/Lose Graph</label>
                 <div className='bg-black h-68 w-68 rounded-md flex flex-row justify-center items-center'>
-                    <p className='text-white'>There will be sumn. WIP</p>
+                    <p className='text-white'></p>
                 </div>
             </div>
             <div className='flex flex-col items-between gap-2'>

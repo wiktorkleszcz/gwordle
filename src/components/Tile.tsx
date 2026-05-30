@@ -7,6 +7,7 @@ type TileProps = {
     value: string
     status: LetterStatus | null
     active: boolean
+    solution: boolean
     // null = nothing to show (empty tile); a number renders the odds badge.
     multiplier: number | null
     onClick: () => void
@@ -19,12 +20,12 @@ const STATUS_CLASS: Record<LetterStatus, string> = {
     absent: "bg-stone-700",
 }
 
-export default function Tile({value, status, active, multiplier, onClick}: TileProps) {
+export default function Tile({value, status, active, solution, multiplier, onClick}: TileProps) {
     const background = status ? STATUS_CLASS[status] : "bg-stone-900"
 
     return (
         <div 
-            className={`relative flex flex-col justify-center items-center w-22 h-22 rounded-xl text-6xl text-white cursor-pointer ${background} ${active ? "outline-2 outline-offset-2 outline-green-500" : ""}`}
+            className={`relative flex flex-col justify-center items-center w-22 h-22 rounded-xl text-6xl text-white cursor-pointer ${background} ${active ?? "outline-2 outline-offset-2 outline-green-500" } ${!solution ? "hover:outline-2 hover:outline-offset-2 hover:outline-white" : ""}`}
             onClick={onClick}
         >
             {value}
