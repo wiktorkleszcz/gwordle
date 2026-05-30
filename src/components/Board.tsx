@@ -9,11 +9,14 @@ import SolutionRow from "./SolutionRow";
 // comes from the settings context.
 export default function Board() {
     const { gameState } = useGameSettings()
-    const { board, boardDispatch, position, positionDispatch, submit, reset } = useBoard()
+    const { board, boardDispatch, position, positionDispatch, submit, reset, multipliers, finalMultiplier } = useBoard()
     const boardRef = useRef<HTMLDivElement>(null)
 
     const { length, tries } = gameState
     const locked = board.phase === 'result'
+
+    // Per-tile multipliers are derived from the letters (with duplicate
+    // de-duplication), not stored, so they recompute only when letters change.
 
     // One keyboard handler controls letters, deleting, row changes, and arrows.
     function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
@@ -97,6 +100,7 @@ export default function Board() {
                     key={i}
                     letters={row}
                     statuses={board.statuses[i]}
+                    multipliers={multipliers[i]}
                     // Hide the cursor while locked so nothing looks editable.
                     activeCol={!locked && position.row === i ? position.col : null}
                     onTileClick={(col) => {
@@ -110,6 +114,7 @@ export default function Board() {
             ))}
             {/* The solution sits under the grid: "?" while typing, revealed on result. */}
             <SolutionRow solution={board.solution} length={length} phase={board.phase} />
+            <p className="text-white text-2xl">Final multiplier equals: {finalMultiplier}</p>
             </div>
         </div>
     )

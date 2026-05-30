@@ -4,11 +4,16 @@ import {
     useReducer,
     useEffect,
     useRef,
+    useMemo,
     type ReactNode,
     type Dispatch,
+    useState,
 } from "react";
 import { useGameSettings } from "#/store/GameSettingContext";
-import { pickWord } from "#/store/wordBank";
+import { pickWord } from "#/game/wordBank";
+import { computeTileMultipliers } from "#/game/tileMultipliers";
+import finalMultiplierCalc from "#/game/finalMultiplier";
+import { lengthMultiplier, triesMultiplier } from "#/game/multipliers";
 
 // This context owns the actual game grid: the typed letters, the per-tile
 // check results, and the cursor. The grid SIZE (length/tries) is not stored
@@ -201,6 +206,8 @@ type BoardContextType = {
     // (Actions) call these, so word-drawing and resets live in one place.
     submit: () => void
     reset: () => void
+    multipliers: (number | null)[][]
+    finalMultiplier: number
 }
 
 const BoardContext = createContext<BoardContextType | null>(null)
@@ -210,6 +217,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
     // rendered INSIDE GameSettingProvider, so it can consume useGameSettings()
     // and read the board size (length/tries) chosen by the sliders.
     const { gameState } = useGameSettings()
+    const [finalMultiplier, setFinalMultiplier] = useState(0)
 
     // The size is used to build the initial board (lazy init, third arg).
     const [board, boardDispatch] = useReducer(
@@ -235,6 +243,27 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         positionDispatch({ type: 'reset' })
     }, [gameState.tries, gameState.length])
 
+    const multipliers = useMemo(
+        () => computeTileMultipliers(board.letters, length),
+        [board.letters, length]
+    )
+
+    // Recompute the final multiplier once the reducer has produced the new
+    // statuses. Reading board.statuses right after dispatch would be stale, so
+    // we react to it here instead.
+    useEffect(() => {
+        if (board.phase === 'result') {
+            const newLengthMultiplier = lengthMultiplier(gameState.length)
+            const newTriesMultiplier = triesMultiplier(gameState.tries)
+            const lettersMultiplier = finalMultiplierCalc(board.statuses, multipliers)
+            setFinalMultiplier(Number((newLengthMultiplier*newTriesMultiplier*lettersMultiplier).toFixed(2)))
+        }
+
+        return () => {
+            setFinalMultiplier(0)
+        }
+    }, [board.phase, board.statuses, multipliers])
+
     // Draw the secret word at submit time (not before), then reveal the result.
     function submit() {
         if (!canSubmit(board)) return
@@ -247,10 +276,11 @@ export function BoardProvider({ children }: { children: ReactNode }) {
     function reset() {
         boardDispatch({ type: 'reset', tries: gameState.tries, length: gameState.length })
         positionDispatch({ type: 'reset' })
+        setFinalMultiplier(0)
     }
 
     return (
-        <BoardContext.Provider value={{ board, boardDispatch, position, positionDispatch, submit, reset }}>
+        <BoardContext.Provider value={{ board, boardDispatch, position, positionDispatch, submit, reset, multipliers, finalMultiplier }}>
             {children}
         </BoardContext.Provider>
     )
