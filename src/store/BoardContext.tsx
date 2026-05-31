@@ -8,6 +8,7 @@ import {
     type ReactNode,
     type Dispatch,
     useState,
+    type SetStateAction,
 } from "react";
 import { useGameSettings } from "#/store/GameSettingContext";
 import { pickWord } from "#/game/wordBank";
@@ -207,6 +208,8 @@ type BoardContextType = {
     reset: () => void
     multipliers: (number | null)[][]
     finalMultiplier: number
+    isSpinning: boolean
+    setIsSpinning: Dispatch<SetStateAction<boolean>>
 }
 
 const BoardContext = createContext<BoardContextType | null>(null)
@@ -217,6 +220,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
     // and read the board size (length/tries) chosen by the sliders.
     const { gameState } = useGameSettings()
     const [finalMultiplier, setFinalMultiplier] = useState(0)
+    const [isSpinning, setIsSpinning] = useState(false);
 
     // The size is used to build the initial board (lazy init, third arg).
     const [board, boardDispatch] = useReducer(
@@ -265,7 +269,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
 
     // Draw the secret word at submit time (not before), then reveal the result.
     function submit() {
-        if (!canSubmit(board, gameState.mode)) return
+        if (!canSubmit(board, gameState.mode) && gameState.stake === 0) return
         const word = pickWord(gameState.length, lastWordRef.current)
         lastWordRef.current = word
         boardDispatch({ type: 'submit', solution: word })
@@ -278,8 +282,28 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         setFinalMultiplier(0)
     }
 
+    useEffect(() => {
+        let interval = undefined;
+  
+        if (isSpinning) {
+          interval = setInterval(() => {
+            console.log(1)
+            submit()
+          }, 1000)
+        }
+  
+        return () => {
+          clearInterval(interval)
+        }
+        // console.log("a")
+  
+        // return () => {
+        //   console.log("b")
+        // }
+      }, [isSpinning])
+
     return (
-        <BoardContext.Provider value={{ board, boardDispatch, position, positionDispatch, submit, reset, multipliers, finalMultiplier }}>
+        <BoardContext.Provider value={{ board, boardDispatch, position, positionDispatch, submit, reset, multipliers, finalMultiplier, isSpinning, setIsSpinning }}>
             {children}
         </BoardContext.Provider>
     )

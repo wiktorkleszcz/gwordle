@@ -9,7 +9,7 @@ import SolutionRow from "./SolutionRow";
 // comes from the settings context.
 export default function Board() {
     const { gameState } = useGameSettings()
-    const { board, boardDispatch, position, positionDispatch, submit, reset, multipliers, finalMultiplier } = useBoard()
+    const { board, boardDispatch, position, positionDispatch, submit, reset, multipliers, finalMultiplier, isSpinning, setIsSpinning } = useBoard()
     const boardRef = useRef<HTMLDivElement>(null)
 
     const { length, tries } = gameState
@@ -23,6 +23,7 @@ export default function Board() {
         // In 'result' the board is frozen: only Enter (to reset) is accepted.
         if (locked) {
             if (e.key === "Enter") {
+                setIsSpinning(false)
                 reset()
             }
             return
@@ -82,6 +83,10 @@ export default function Board() {
 
         if (e.key === "Enter") {
             // Draws the word and checks every row; no-op if the board is not ready.
+            if (gameState.mode === "auto") {
+                setIsSpinning(true)
+                return
+            }
             submit()
         }
     }
@@ -91,7 +96,7 @@ export default function Board() {
             ref={boardRef}
             tabIndex={0}
             onKeyDown={handleKeyDown}
-            className="w-240 h-240 bg-stone-800 rounded-xl flex flex-col justify-between items-center outline-none p-10"
+            className="w-240 h-240 bg-stone-800 rounded-xl flex flex-col justify-between items-center outline-none p-10 shadow-[-6px_-6px_12px_rgba(255,255,255,0.2),6px_6px_12px_rgba(0,0,0,0.5)]"
         >   
             <h1 className="text-white text-6xl">Board</h1>
             <div className="flex flex-col justify-center items-center gap-2 h-full">
@@ -114,7 +119,7 @@ export default function Board() {
             ))}
             {/* The solution sits under the grid: "?" while typing, revealed on result. */}
             <SolutionRow solution={board.solution} length={length} phase={board.phase} />
-            <p className="text-white text-2xl">Final multiplier equals: {finalMultiplier}</p>
+            <p className="text-white text-2xl">Payout: {finalMultiplier*gameState.stake}</p>
             </div>
         </div>
     )

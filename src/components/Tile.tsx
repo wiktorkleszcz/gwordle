@@ -25,7 +25,7 @@ export default function Tile({value, status, active, solution, multiplier, onCli
 
     return (
         <div 
-            className={`relative flex flex-col justify-center items-center w-22 h-22 rounded-xl text-6xl text-white cursor-pointer ${background} ${active ?? "outline-2 outline-offset-2 outline-green-500" } ${!solution ? "hover:outline-2 hover:outline-offset-2 hover:outline-white" : ""}`}
+            className={`relative flex flex-col justify-center items-center w-22 h-22 rounded-xl text-6xl text-white cursor-pointer ${background} ${active ? "outline-2 outline-offset-2 outline-green-500" : ""} ${!solution ? "hover:outline-2 hover:outline-offset-2 hover:outline-white" : ""}`}
             onClick={onClick}
         >
             {value}

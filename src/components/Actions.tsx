@@ -4,13 +4,11 @@ import { canSubmit, useBoard } from "#/store/BoardContext";
 import { lengthMultiplier, triesMultiplier } from "#/game/multipliers";
 import Slider from "./Slider";
 import Multiplier from "./Multiplier";
-import { useEffect, useState } from "react";
 
 // Actions renders the game settings panel and dispatches changes to shared game settings.
 export default function Actions() {
     const {gameState, gameStateDispatch} = useGameSettings();
-    const { board, submit, reset } = useBoard();
-    const [isSpinning, setIsSpinning] = useState(false);
+    const { board, submit, reset, isSpinning, setIsSpinning } = useBoard();
 
     // The bottom button mirrors the Enter key: it submits during input and
     // resets once the result is shown. Both triggers go through the same
@@ -18,27 +16,8 @@ export default function Actions() {
     const isResult = board.phase === 'result';
     // const playLabel = isResult ? "Play again" : "Check";
     const playLabel = gameState.mode === "auto" ? (isSpinning  ? "Stop" : "Start") : (isResult ? "Play again" : "Check");
-    const canPlay = isResult || canSubmit(board, gameState.mode);
+    const canPlay = isResult || (canSubmit(board, gameState.mode) && !(gameState.stake === 0));
 
-    useEffect(() => {
-      let interval = undefined;
-
-      if (isSpinning) {
-        interval = setInterval(() => {
-          console.log(1)
-          submit()
-        }, 1000)
-      }
-
-      return () => {
-        clearInterval(interval)
-      }
-      // console.log("a")
-
-      // return () => {
-      //   console.log("b")
-      // }
-    }, [isSpinning])
 
     function handlePlay() {
       if (isSpinning) {
@@ -60,7 +39,7 @@ export default function Actions() {
     }
 
     return (
-        <div className='flex flex-col justify-between content-center p-6 bg-stone-800 w-80 gap-2 rounded-2xl'>
+        <div className='flex flex-col justify-between content-center p-6 bg-stone-800 w-80 gap-2 rounded-2xl shadow-[-3px_-3px_6px_rgba(255,255,255,0.2),3px_3px_6px_rgba(0,0,0,0.5)]'>
             <h1 className='flex flex-row justify-center text-white text-3xl'>Let's Play!</h1>
             <Input
               min={STAKE_LIMITS.min}
@@ -100,24 +79,24 @@ export default function Actions() {
             </div>
             <div className='flex flex-col items-between gap-2'>
                 <label className='text-white'>Profit/Lose Graph</label>
-                <div className='bg-black h-68 w-68 rounded-md flex flex-row justify-center items-center'>
+                <div className='bg-stone-800 h-68 w-68 rounded-md flex flex-row justify-center items-center shadow-[inset_2px_2px_4px_rgba(0,0,0,0.5),inset_-1px_-2px_4px_rgba(255,255,255,0.3)]'>
                     <p className='text-white'></p>
                 </div>
             </div>
             <div className='flex flex-col items-between gap-2'>
                 <label className='text-white'>Manual/Auto</label>
-                <div className='flex flex-row justify-center'>
+                <div className='flex flex-row justify-center rounded-md shadow-[-2px_-2px_4px_rgba(255,255,255,0.2),2px_2px_4px_rgba(0,0,0,0.5)]'>
                     {/* Buttons use type="button" so they do not submit a parent form. */}
                     <button 
                       type='button'
-                      className={`${gameState.mode === "manual" ? "bg-green-500" : "bg-black hover:bg-stone-900" } text-white p-3 rounded-bl-md rounded-tl-md min-w-24 transition-colors w-full`}
+                      className={`${gameState.mode === "manual" ? "bg-green-500" : "bg-stone-800 hover:bg-stone-900" } text-white p-3 rounded-bl-md rounded-tl-md min-w-24 transition-colors w-full`}
                       onClick={() => gameStateDispatch({type: 'setMode', value: 'manual'})}
                       >
                         Manual
                       </button>
                     <button 
                       type='button'
-                      className={`${gameState.mode === "auto" ? "bg-green-500" : "bg-black  hover:bg-stone-900"} text-white p-3 rounded-br-md rounded-tr-md min-w-24 transition-colors w-full`}
+                      className={`${gameState.mode === "auto" ? "bg-green-500" : "bg-stone-800  hover:bg-stone-900"} text-white p-3 rounded-br-md rounded-tr-md min-w-24 transition-colors w-full`}
                       onClick={() => gameStateDispatch({type: 'setMode', value: 'auto'})}
                       >
                         Autoplay
