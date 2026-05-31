@@ -14,9 +14,9 @@ export const Route = createFileRoute('/game')({
 function RouteComponent() {
   const[isHovered, setIsHovered] = useState(false)
   return (
-    <div className={`flex flex-col gap-2 bg-gradient-to-br from-black via-black ${isHovered ? "to-red-500" : "to-green-500"} transition-colors w-screen h-screen overflow-hidden`}>
-        <Header link='/' onHover={setIsHovered}/>
-        <main className='flex flex-row justify-center items-center h-full gap-2'>
+    <div className={`flex flex-col gap-2 bg-stone-800 transition-colors w-screen h-screen overflow-hidden`}>
+        <Header link='/' onHover={setIsHovered} classes='bg-stone-800 text-white p-3 rounded-md min-w-24 shadow-[-1px_-1px_2px_rgba(255,255,255,0.2),1px_1px_2px_rgba(0,0,0,0.5)]'/>
+        <main className='flex flex-row justify-center items-center h-full gap-10'>
           {/* Actions and Board share the same settings context here. */}
           {/* BoardProvider sits inside GameSettingProvider so it can read the grid size. */}
           <GameSettingProvider>

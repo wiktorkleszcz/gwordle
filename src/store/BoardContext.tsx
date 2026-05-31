@@ -8,6 +8,7 @@ import {
     type ReactNode,
     type Dispatch,
     useState,
+    type SetStateAction,
 } from "react";
 import { useGameSettings } from "#/store/GameSettingContext";
 import { pickWord } from "#/game/wordBank";
@@ -101,10 +102,10 @@ function isRowFull(row: string[]): boolean {
 
 // Submit is allowed only in 'input' phase and only when EVERY row is completely
 // filled. Exported so the Actions button can disable itself until then.
-export function canSubmit(state: BoardState): boolean {
-    if (state.phase !== 'input') return false
+export function canSubmit(boardState: BoardState, gameState: string): boolean {
+    if (boardState.phase !== 'input' && gameState === "manual") return false
 
-    return state.letters.every(isRowFull)
+    return boardState.letters.every(isRowFull)
 }
 
 export type BoardAction =
@@ -132,7 +133,6 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
         }
         case 'submit': {
             // Guard here too, so the rule holds no matter who dispatches it.
-            if (!canSubmit(state)) return state
 
             // Every row is full at this point, so check them all against the
             // drawn solution and store it for the reveal.
@@ -208,6 +208,8 @@ type BoardContextType = {
     reset: () => void
     multipliers: (number | null)[][]
     finalMultiplier: number
+    isSpinning: boolean
+    setIsSpinning: Dispatch<SetStateAction<boolean>>
 }
 
 const BoardContext = createContext<BoardContextType | null>(null)
@@ -218,6 +220,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
     // and read the board size (length/tries) chosen by the sliders.
     const { gameState } = useGameSettings()
     const [finalMultiplier, setFinalMultiplier] = useState(0)
+    const [isSpinning, setIsSpinning] = useState(false);
 
     // The size is used to build the initial board (lazy init, third arg).
     const [board, boardDispatch] = useReducer(
@@ -266,7 +269,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
 
     // Draw the secret word at submit time (not before), then reveal the result.
     function submit() {
-        if (!canSubmit(board)) return
+        if (!canSubmit(board, gameState.mode) && gameState.stake === 0) return
         const word = pickWord(gameState.length, lastWordRef.current)
         lastWordRef.current = word
         boardDispatch({ type: 'submit', solution: word })
@@ -279,8 +282,28 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         setFinalMultiplier(0)
     }
 
+    useEffect(() => {
+        let interval = undefined;
+  
+        if (isSpinning) {
+          interval = setInterval(() => {
+            console.log(1)
+            submit()
+          }, 1000)
+        }
+  
+        return () => {
+          clearInterval(interval)
+        }
+        // console.log("a")
+  
+        // return () => {
+        //   console.log("b")
+        // }
+      }, [isSpinning])
+
     return (
-        <BoardContext.Provider value={{ board, boardDispatch, position, positionDispatch, submit, reset, multipliers, finalMultiplier }}>
+        <BoardContext.Provider value={{ board, boardDispatch, position, positionDispatch, submit, reset, multipliers, finalMultiplier, isSpinning, setIsSpinning }}>
             {children}
         </BoardContext.Provider>
     )
