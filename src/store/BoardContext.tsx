@@ -101,10 +101,10 @@ function isRowFull(row: string[]): boolean {
 
 // Submit is allowed only in 'input' phase and only when EVERY row is completely
 // filled. Exported so the Actions button can disable itself until then.
-export function canSubmit(state: BoardState): boolean {
-    if (state.phase !== 'input') return false
+export function canSubmit(boardState: BoardState, gameState: string): boolean {
+    if (boardState.phase !== 'input' && gameState === "manual") return false
 
-    return state.letters.every(isRowFull)
+    return boardState.letters.every(isRowFull)
 }
 
 export type BoardAction =
@@ -132,7 +132,6 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
         }
         case 'submit': {
             // Guard here too, so the rule holds no matter who dispatches it.
-            if (!canSubmit(state)) return state
 
             // Every row is full at this point, so check them all against the
             // drawn solution and store it for the reveal.
@@ -266,7 +265,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
 
     // Draw the secret word at submit time (not before), then reveal the result.
     function submit() {
-        if (!canSubmit(board)) return
+        if (!canSubmit(board, gameState.mode)) return
         const word = pickWord(gameState.length, lastWordRef.current)
         lastWordRef.current = word
         boardDispatch({ type: 'submit', solution: word })

@@ -4,20 +4,54 @@ import { canSubmit, useBoard } from "#/store/BoardContext";
 import { lengthMultiplier, triesMultiplier } from "#/game/multipliers";
 import Slider from "./Slider";
 import Multiplier from "./Multiplier";
+import { useEffect, useState } from "react";
 
 // Actions renders the game settings panel and dispatches changes to shared game settings.
 export default function Actions() {
     const {gameState, gameStateDispatch} = useGameSettings();
     const { board, submit, reset } = useBoard();
+    const [isSpinning, setIsSpinning] = useState(false);
 
     // The bottom button mirrors the Enter key: it submits during input and
     // resets once the result is shown. Both triggers go through the same
     // context actions, so there is a single source of truth for the flow.
-    const isResult = board.phase === 'result'
-    const playLabel = isResult ? "Play again" : "Check"
-    const canPlay = isResult || canSubmit(board)
+    const isResult = board.phase === 'result';
+    // const playLabel = isResult ? "Play again" : "Check";
+    const playLabel = gameState.mode === "auto" ? (isSpinning  ? "Stop" : "Start") : (isResult ? "Play again" : "Check");
+    const canPlay = isResult || canSubmit(board, gameState.mode);
+
+    useEffect(() => {
+      let interval = undefined;
+
+      if (isSpinning) {
+        interval = setInterval(() => {
+          console.log(1)
+          submit()
+        }, 1000)
+      }
+
+      return () => {
+        clearInterval(interval)
+      }
+      // console.log("a")
+
+      // return () => {
+      //   console.log("b")
+      // }
+    }, [isSpinning])
 
     function handlePlay() {
+      if (isSpinning) {
+        setIsSpinning(false)
+        reset()
+        return
+      }
+
+      if (gameState.mode === "auto") {
+        setIsSpinning(true)
+        return
+      }
+
         if (isResult) {
             reset()
             return
