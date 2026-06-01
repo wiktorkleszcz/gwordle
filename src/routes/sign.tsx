@@ -20,9 +20,11 @@ function RouteComponent() {
     <div className="flex h-screen w-screen flex-col items-center justify-center bg-stone-800">
       {/* <h1 className='text-white'>Hello world</h1> */}
       <Form width="w-lg">
-        <button className="flex self-start text-md p-2 rounded-md text-white shadow-outbox">
-          {"<- go back"}
-        </button>
+        <Link to="/">
+          <button className="flex self-start text-md p-2 rounded-md text-white shadow-outbox">
+            {"<- go back"}
+          </button>
+        </Link>
         <h1 className="flex flex-row justify-center text-4xl m-10 text-white">
           {hasAccount ? "Sign In" : "Sign Up"}
         </h1>
@@ -36,7 +38,9 @@ function RouteComponent() {
             {hasAccount ? "I don't have an account" : "I have an account"}
           </Button>
           <Link to="/game" className="w-full">
-            <Button classes={buttonClasses}>Test</Button>
+            <Button classes={buttonClasses}>
+              {hasAccount ? "Log in" : "Sign up"}
+            </Button>
           </Link>
         </p>
       </Form>

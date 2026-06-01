@@ -3,10 +3,8 @@ import Input from "../Input";
 export default function SignIn() {
   return (
     <>
-      <Input></Input>
-      <Input></Input>
-      <Input></Input>
-      <Input></Input>
+      <Input desc="Username" />
+      <Input type="password" desc="Password" />
     </>
   );
 }
