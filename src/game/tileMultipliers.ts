@@ -10,18 +10,21 @@ import { letterMultiplier } from "#/game/multipliers";
 // The first occurrence top-to-bottom keeps its multiplier; later identical
 // (letter, column) tiles are zeroed. Like everything here it is solution-
 // independent, so it is safe to compute and show during typing.
-export function computeTileMultipliers(letters: string[][], length: number): (number | null)[][] {
-    const claimed = new Set<string>()
+export function computeTileMultipliers(
+  letters: string[][],
+  length: number,
+): (number | null)[][] {
+  const claimed = new Set<string>();
 
-    return letters.map((row) =>
-        row.map((letter, col) => {
-            if (letter === "") return null
+  return letters.map((row) =>
+    row.map((letter, col) => {
+      if (letter === "") return null;
 
-            const key = `${letter.toUpperCase()}@${col}`
-            if (claimed.has(key)) return 0
+      const key = `${letter.toUpperCase()}@${col}`;
+      if (claimed.has(key)) return 0;
 
-            claimed.add(key)
-            return letterMultiplier(letter, col, length)
-        })
-    )
+      claimed.add(key);
+      return letterMultiplier(letter, col, length);
+    }),
+  );
 }

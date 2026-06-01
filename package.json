@@ -42,5 +42,8 @@
       "esbuild",
       "lightningcss"
     ]
+  },
+  "prettier": {
+    "printWidth": 60
   }
 }
