@@ -1,0 +1,34 @@
+@utility shadow-outbox-sm {
+  box-shadow: -1px -1px 2px rgba(255, 255, 255, 0.2),
+    1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+@utility shadow-outbox {
+  box-shadow: -2px -2px 4px rgba(255, 255, 255, 0.2),
+    2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@utility shadow-outbox-lg {
+  box-shadow: -3px -3px 6px rgba(255, 255, 255, 0.2),
+    3px 3px 6px rgba(0, 0, 0, 0.5);
+}
+
+@utility shadow-inbox-sm {
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.5),
+    inset -1px -2px 4px rgba(255, 255, 255, 0.3);
+}
+
+@utility shadow-inbox {
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.8),
+    inset -1px -2px 4px rgba(255, 255, 255, 0.3);
+}
+
+@utility shadow-inbox-lg {
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.5),
+    inset -2px -4px 8px rgba(255, 255, 255, 0.3);
+}
+
+@utility shadow-inbox-pressed {
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.5),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.3);
+}

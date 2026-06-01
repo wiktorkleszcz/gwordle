@@ -1,12 +1,12 @@
 // Button keeps button styling reusable while still accepting normal button props.
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    classes: string
-}
+  classes: string;
+};
 
 export default function Button({ children, classes, ...props }: ButtonProps) {
-    return (
-        <button className={classes} {...props}>
-            {children}
-        </button>
-    )
+  return (
+    <button className={classes} {...props}>
+      {children}
+    </button>
+  );
 }

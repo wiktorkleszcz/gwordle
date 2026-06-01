@@ -1,5 +1,5 @@
-
 @import "tailwindcss";
+@import "./styles/shadows.css";
 
 * {
   box-sizing: border-box;
@@ -14,4 +14,3 @@ body,
 body {
   margin: 0;
 }
-
