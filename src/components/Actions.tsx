@@ -107,7 +107,7 @@ export default function Actions() {
           {/* Buttons use type="button" so they do not submit a parent form. */}
           <button
             type="button"
-            className={`${gameState.mode === "manual" ? "bg-green-500" : "bg-stone-800 hover:bg-stone-900"} text-white p-3 rounded-bl-md rounded-tl-md min-w-24 transition-colors w-full`}
+            className={`${gameState.mode === "manual" ? "shadow-inbox-pressed" : "hover:shadow-inbox-pressed"} text-white p-3 rounded-bl-md rounded-tl-md min-w-24 transition-colors w-full`}
             onClick={() =>
               gameStateDispatch({ type: "setMode", value: "manual" })
             }
@@ -116,7 +116,7 @@ export default function Actions() {
           </button>
           <button
             type="button"
-            className={`${gameState.mode === "auto" ? "bg-green-500" : "bg-stone-800  hover:bg-stone-900"} text-white p-3 rounded-br-md rounded-tr-md min-w-24 transition-colors w-full`}
+            className={`${gameState.mode === "auto" ? "shadow-inbox-pressed" : "hover:shadow-inbox-pressed"} text-white p-3 rounded-br-md rounded-tr-md min-w-24 transition-colors w-full`}
             onClick={() =>
               gameStateDispatch({ type: "setMode", value: "auto" })
             }

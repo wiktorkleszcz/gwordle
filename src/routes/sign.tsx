@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import Form from "#/components/Form";
-import Input from "#/components/Input";
 import Button from "#/components/Button";
 import { useState } from "react";
 import SignIn from "#/components/formComponents/SignIn";
 import SignUp from "#/components/formComponents/SingUp";
+import { useForm } from "@tanstack/react-form";
 
 // Sign route is a placeholder form screen with navigation into home or game.
 export const Route = createFileRoute("/sign")({
@@ -16,6 +16,19 @@ const buttonClasses =
 
 function RouteComponent() {
   const [hasAccount, setHasAccount] = useState(false);
+
+  // const form = useForm({
+  //   defaultValues: {
+  //     username: "",
+  //     email: "",
+  //     password: "",
+  //     repeatPassword: "",
+  //   },
+  //   onSubmit: ({ value }) => {
+  //     console.log(value);
+  //   },
+  // });
+
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center bg-stone-800">
       {/* <h1 className='text-white'>Hello world</h1> */}
