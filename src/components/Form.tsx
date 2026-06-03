@@ -2,13 +2,15 @@
 export default function Form({
   children,
   width,
+  onSubmit,
 }: {
   children: React.ReactNode;
   width: string;
+  onSubmit?: React.FormEventHandler<HTMLFormElement>;
 }) {
   return (
     <form
-      action=""
+      onSubmit={onSubmit}
       className={`flex flex-col justify-between content-center p-6 bg-stone-800 ${width} gap-2 rounded-2xl shadow-outbox`}
     >
       {children}
