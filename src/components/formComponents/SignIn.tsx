@@ -1,10 +1,9 @@
 import Input from "../Input";
 import type { SignFormApi } from "./signFormTypes";
 import {
-  debouncedFieldValidators,
   fieldError,
-  validatePassword,
-  validateUsername,
+  passwordSchema,
+  usernameSchema,
 } from "./signValidators";
 
 export default function SignIn({ form }: { form: SignFormApi }) {
@@ -12,7 +11,9 @@ export default function SignIn({ form }: { form: SignFormApi }) {
     <>
       <form.Field
         name="username"
-        validators={debouncedFieldValidators(validateUsername)}
+        validators={{
+          onChange: usernameSchema,
+        }}
       >
         {(field) => (
           <Input
@@ -27,7 +28,9 @@ export default function SignIn({ form }: { form: SignFormApi }) {
       </form.Field>
       <form.Field
         name="password"
-        validators={debouncedFieldValidators(validatePassword)}
+        validators={{
+          onChange: passwordSchema,
+        }}
       >
         {(field) => (
           <Input

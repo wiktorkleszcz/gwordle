@@ -1,13 +1,11 @@
 import Input from "../Input";
 import type { SignFormApi } from "./signFormTypes";
 import {
-  debouncedFieldValidators,
+  emailSchema,
   fieldError,
-  SIGN_FIELD_DEBOUNCE_MS,
-  validateEmail,
-  validatePassword,
+  passwordSchema,
   validateRepeatPassword,
-  validateUsername,
+  usernameSchema,
 } from "./signValidators";
 
 export default function SignUp({ form }: { form: SignFormApi }) {
@@ -15,7 +13,9 @@ export default function SignUp({ form }: { form: SignFormApi }) {
     <>
       <form.Field
         name="email"
-        validators={debouncedFieldValidators(validateEmail)}
+        validators={{
+          onChange: emailSchema,
+        }}
       >
         {(field) => (
           <Input
@@ -31,7 +31,9 @@ export default function SignUp({ form }: { form: SignFormApi }) {
       </form.Field>
       <form.Field
         name="username"
-        validators={debouncedFieldValidators(validateUsername)}
+        validators={{
+          onChange: usernameSchema,
+        }}
       >
         {(field) => (
           <Input
@@ -46,7 +48,9 @@ export default function SignUp({ form }: { form: SignFormApi }) {
       </form.Field>
       <form.Field
         name="password"
-        validators={debouncedFieldValidators(validatePassword)}
+        validators={{
+          onChange: passwordSchema,
+        }}
       >
         {(field) => (
           <Input
@@ -64,8 +68,7 @@ export default function SignUp({ form }: { form: SignFormApi }) {
         name="repeatPassword"
         validators={{
           onChangeListenTo: ["password"],
-          onChangeAsyncDebounceMs: SIGN_FIELD_DEBOUNCE_MS,
-          onChangeAsync: ({ value, fieldApi }) =>
+          onChange: ({ value, fieldApi }) =>
             validateRepeatPassword(
               value,
               fieldApi.form.getFieldValue("password"),
