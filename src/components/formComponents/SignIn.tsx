@@ -1,24 +1,24 @@
 import Input from "../Input";
 import type { SignFormApi } from "./signFormTypes";
-import { validatePassword, validateUsername } from "./signValidators";
+import {
+  fieldError,
+  passwordSchema,
+  SIGN_FIELD_DEBOUNCE_MS,
+  usernameSchema,
+} from "./signValidators";
 
-function fieldError(meta: {
-  isBlurred: boolean;
-  isValid: boolean;
-  errors: readonly unknown[];
+export default function SignIn({
+  form,
+}: {
+  form: SignFormApi;
 }) {
-  if (!meta.isBlurred || meta.isValid) return undefined;
-  return meta.errors.map(String).join(", ");
-}
-
-export default function SignIn({ form }: { form: SignFormApi }) {
   return (
     <>
       <form.Field
         name="username"
         validators={{
-          onChange: ({ value }) => validateUsername(value),
-          onBlur: ({ value }) => validateUsername(value),
+          onChangeAsyncDebounceMs: SIGN_FIELD_DEBOUNCE_MS,
+          onChangeAsync: usernameSchema,
         }}
       >
         {(field) => (
@@ -27,7 +27,9 @@ export default function SignIn({ form }: { form: SignFormApi }) {
             name={field.name}
             value={field.state.value}
             onBlur={field.handleBlur}
-            onChange={(e) => field.handleChange(e.target.value)}
+            onChange={(e) =>
+              field.handleChange(e.target.value)
+            }
             error={fieldError(field.state.meta)}
           />
         )}
@@ -35,8 +37,8 @@ export default function SignIn({ form }: { form: SignFormApi }) {
       <form.Field
         name="password"
         validators={{
-          onChange: ({ value }) => validatePassword(value),
-          onBlur: ({ value }) => validatePassword(value),
+          onChangeAsyncDebounceMs: SIGN_FIELD_DEBOUNCE_MS,
+          onChangeAsync: passwordSchema,
         }}
       >
         {(field) => (
@@ -46,8 +48,10 @@ export default function SignIn({ form }: { form: SignFormApi }) {
             name={field.name}
             value={field.state.value}
             onBlur={field.handleBlur}
-            onChange={(e) => field.handleChange(e.target.value)}
-            // error={fieldError(field.state.meta)}
+            onChange={(e) =>
+              field.handleChange(e.target.value)
+            }
+            error={fieldError(field.state.meta)}
           />
         )}
       </form.Field>

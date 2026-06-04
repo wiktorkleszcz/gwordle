@@ -1,25 +1,44 @@
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { z } from "zod";
 
-export function validateUsername(value: string) {
-  if (!value.trim()) return "Username is required";
-  if (value.trim().length < 3) {
-    return "Username must be at least 3 characters";
+export const SIGN_FIELD_DEBOUNCE_MS = 500;
+
+export const emailSchema = z
+  .string()
+  .trim()
+  .min(1, "Email is required")
+  .email("Enter a valid email");
+
+export const usernameSchema = z
+  .string()
+  .trim()
+  .min(1, "Username is required")
+  .min(3, "Username must be at least 3 characters");
+
+export const passwordSchema = z
+  .string()
+  .min(1, "Password is required")
+  .min(6, "Password must be at least 6 characters");
+
+export function fieldError(meta: { errorMap: { onChange?: unknown } }) {
+  const error = meta.errorMap.onChange;
+
+  if (!error) return undefined;
+
+  if (Array.isArray(error)) {
+    const firstError = error[0];
+
+    if (
+      typeof firstError === "object" &&
+      firstError !== null &&
+      "message" in firstError
+    ) {
+      return String(firstError.message);
+    }
+
+    return String(firstError);
   }
-  return undefined;
-}
 
-export function validateEmail(value: string) {
-  if (!value.trim()) return "Email is required";
-  if (!EMAIL_PATTERN.test(value.trim())) return "Enter a valid email";
-  return undefined;
-}
-
-export function validatePassword(value: string) {
-  if (!value) return "Password is required";
-  if (value.length < 6) {
-    return "Password must be at least 6 characters";
-  }
-  return undefined;
+  return String(error);
 }
 
 export function validateRepeatPassword(

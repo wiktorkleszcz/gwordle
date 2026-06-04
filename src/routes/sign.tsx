@@ -9,7 +9,7 @@ import { useState } from "react";
 import SignIn from "#/components/formComponents/SignIn";
 import SignUp from "#/components/formComponents/SingUp";
 import { useForm } from "@tanstack/react-form";
-import type { SignFormValues } from "#/components/formComponents/signFormTypes";
+import { signFormDefaultValues } from "#/components/formComponents/signFormTypes";
 
 // Sign route is a placeholder form screen with navigation into home or game.
 export const Route = createFileRoute("/sign")({
@@ -19,19 +19,12 @@ export const Route = createFileRoute("/sign")({
 const buttonClasses =
   "bg-stone-800 w-full text-white p-3 rounded-md min-w-24 transition-colors shadow-outbox hover:shadow-inbox";
 
-const defaultValues: SignFormValues = {
-  username: "",
-  email: "",
-  password: "",
-  repeatPassword: "",
-};
-
 function RouteComponent() {
   const [hasAccount, setHasAccount] = useState(false);
   const navigate = useNavigate();
 
   const form = useForm({
-    defaultValues,
+    defaultValues: signFormDefaultValues,
     onSubmit: () => {
       navigate({ to: "/game" });
     },

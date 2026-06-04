@@ -1,4 +1,4 @@
-import type { ReactFormExtendedApi } from "@tanstack/react-form";
+import { useForm } from "@tanstack/react-form";
 
 export type SignFormValues = {
   username: string;
@@ -7,17 +7,15 @@ export type SignFormValues = {
   repeatPassword: string;
 };
 
-export type SignFormApi = ReactFormExtendedApi<
-  SignFormValues,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined
->;
+export const signFormDefaultValues: SignFormValues = {
+  username: "",
+  email: "",
+  password: "",
+  repeatPassword: "",
+};
+
+function signFormForType() {
+  return useForm({ defaultValues: signFormDefaultValues });
+}
+
+export type SignFormApi = ReturnType<typeof signFormForType>;
