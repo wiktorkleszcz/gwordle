@@ -3,16 +3,22 @@ import type { SignFormApi } from "./signFormTypes";
 import {
   fieldError,
   passwordSchema,
+  SIGN_FIELD_DEBOUNCE_MS,
   usernameSchema,
 } from "./signValidators";
 
-export default function SignIn({ form }: { form: SignFormApi }) {
+export default function SignIn({
+  form,
+}: {
+  form: SignFormApi;
+}) {
   return (
     <>
       <form.Field
         name="username"
         validators={{
-          onChange: usernameSchema,
+          onChangeAsyncDebounceMs: SIGN_FIELD_DEBOUNCE_MS,
+          onChangeAsync: usernameSchema,
         }}
       >
         {(field) => (
@@ -21,7 +27,9 @@ export default function SignIn({ form }: { form: SignFormApi }) {
             name={field.name}
             value={field.state.value}
             onBlur={field.handleBlur}
-            onChange={(e) => field.handleChange(e.target.value)}
+            onChange={(e) =>
+              field.handleChange(e.target.value)
+            }
             error={fieldError(field.state.meta)}
           />
         )}
@@ -29,7 +37,8 @@ export default function SignIn({ form }: { form: SignFormApi }) {
       <form.Field
         name="password"
         validators={{
-          onChange: passwordSchema,
+          onChangeAsyncDebounceMs: SIGN_FIELD_DEBOUNCE_MS,
+          onChangeAsync: passwordSchema,
         }}
       >
         {(field) => (
@@ -39,7 +48,9 @@ export default function SignIn({ form }: { form: SignFormApi }) {
             name={field.name}
             value={field.state.value}
             onBlur={field.handleBlur}
-            onChange={(e) => field.handleChange(e.target.value)}
+            onChange={(e) =>
+              field.handleChange(e.target.value)
+            }
             error={fieldError(field.state.meta)}
           />
         )}

@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const SIGN_FIELD_DEBOUNCE_MS = 500;
+
 export const emailSchema = z
   .string()
   .trim()
