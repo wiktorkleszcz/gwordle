@@ -1,5 +1,22 @@
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+export const SIGN_FIELD_DEBOUNCE_MS = 500;
+
+export function debouncedFieldValidators(
+  validate: (value: string) => string | undefined,
+) {
+  return {
+    onChangeAsyncDebounceMs: SIGN_FIELD_DEBOUNCE_MS,
+    onChangeAsync: ({ value }: { value: string }) => validate(value),
+  };
+}
+
+export function fieldError(meta: { errorMap: { onChange?: unknown } }) {
+  const message = meta.errorMap.onChange;
+  if (message == null || message === "") return undefined;
+  return String(message);
+}
+
 export function validateUsername(value: string) {
   if (!value.trim()) return "Username is required";
   if (value.trim().length < 3) {

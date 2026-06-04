@@ -1,30 +1,21 @@
 import Input from "../Input";
 import type { SignFormApi } from "./signFormTypes";
 import {
+  debouncedFieldValidators,
+  fieldError,
+  SIGN_FIELD_DEBOUNCE_MS,
   validateEmail,
   validatePassword,
   validateRepeatPassword,
   validateUsername,
 } from "./signValidators";
 
-function fieldError(meta: {
-  isBlurred: boolean;
-  isValid: boolean;
-  errors: readonly unknown[];
-}) {
-  if (!meta.isBlurred || meta.isValid) return undefined;
-  return meta.errors.map(String).join(", ");
-}
-
 export default function SignUp({ form }: { form: SignFormApi }) {
   return (
     <>
       <form.Field
         name="email"
-        validators={{
-          onChange: ({ value }) => validateEmail(value),
-          onBlur: ({ value }) => validateEmail(value),
-        }}
+        validators={debouncedFieldValidators(validateEmail)}
       >
         {(field) => (
           <Input
@@ -40,10 +31,7 @@ export default function SignUp({ form }: { form: SignFormApi }) {
       </form.Field>
       <form.Field
         name="username"
-        validators={{
-          onChange: ({ value }) => validateUsername(value),
-          onBlur: ({ value }) => validateUsername(value),
-        }}
+        validators={debouncedFieldValidators(validateUsername)}
       >
         {(field) => (
           <Input
@@ -58,10 +46,7 @@ export default function SignUp({ form }: { form: SignFormApi }) {
       </form.Field>
       <form.Field
         name="password"
-        validators={{
-          onChange: ({ value }) => validatePassword(value),
-          onBlur: ({ value }) => validatePassword(value),
-        }}
+        validators={debouncedFieldValidators(validatePassword)}
       >
         {(field) => (
           <Input
@@ -79,12 +64,8 @@ export default function SignUp({ form }: { form: SignFormApi }) {
         name="repeatPassword"
         validators={{
           onChangeListenTo: ["password"],
-          onChange: ({ value, fieldApi }) =>
-            validateRepeatPassword(
-              value,
-              fieldApi.form.getFieldValue("password"),
-            ),
-          onBlur: ({ value, fieldApi }) =>
+          onChangeAsyncDebounceMs: SIGN_FIELD_DEBOUNCE_MS,
+          onChangeAsync: ({ value, fieldApi }) =>
             validateRepeatPassword(
               value,
               fieldApi.form.getFieldValue("password"),
