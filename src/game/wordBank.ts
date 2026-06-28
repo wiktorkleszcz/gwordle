@@ -2,7 +2,18 @@
 // word that matches the current "length" setting (3-8, see the Length slider).
 // Kept as a plain module (no React) so it is trivial to swap for an API later.
 const WORD_BANK: Record<number, string[]> = {
-  3: ["CAT", "DOG", "SUN", "BOX", "FLY", "ICE", "JOY", "KEY", "RUN", "TOP"],
+  3: [
+    "CAT",
+    "DOG",
+    "SUN",
+    "BOX",
+    "FLY",
+    "ICE",
+    "JOY",
+    "KEY",
+    "RUN",
+    "TOP",
+  ],
   4: [
     "TREE",
     "BLUE",
@@ -62,13 +73,17 @@ const WORD_BANK: Record<number, string[]> = {
     "TREASURE",
     "UMBRELLA",
     "VACATION",
+    "KIEPANDO",
   ],
 };
 
 // Pick a random word of the given length. `exclude` (the previous solution)
 // is avoided so a new game does not repeat the word back-to-back, unless the
 // list is too small to offer an alternative.
-export function pickWord(length: number, exclude?: string | null): string {
+export function pickWord(
+  length: number,
+  exclude?: string | null,
+): string {
   const words = WORD_BANK[length] ?? [];
 
   if (words.length === 0) {
@@ -81,6 +96,8 @@ export function pickWord(length: number, exclude?: string | null): string {
       ? words.filter((word) => word !== exclude)
       : words;
 
-  const index = Math.floor(Math.random() * candidates.length);
+  const index = Math.floor(
+    Math.random() * candidates.length,
+  );
   return candidates[index];
 }
