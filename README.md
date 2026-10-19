@@ -2,6 +2,16 @@
 
 GWRDL is a Wordle-inspired web game prototype. You configure stake, word length, and number of tries, play on a Wordle-style board, and see payouts from letter/length/tries multipliers. The UI uses a dark neumorphic style.
 
+## Disclaimer
+
+**GWRDL is a parody and a design experiment, not a gambling product.**
+
+- **No real money.** Stakes, payouts, and balances are fictional UI only. This project does not accept wagers, does not pay out prizes, and **never will** operate with real currency or real-world value.
+- **Anti-gambling stance.** The author is strictly against gambling and does not encourage betting or games of chance for money.
+- **Why the “betting” skin exists.** The point is to show how familiar, skill-based games (here, Wordle-style guessing) can be reframed with stakes and multipliers until they *feel* like gambling — even when the core loop is still “just a game.” GWRDL is meant as a cautionary example: almost any game can be dressed up as a gambling product; that does not make it ethical or safe to do so in the real world.
+
+If you use this repo, treat all monetary language as satire and keep play offline and pretend-only.
+
 ## Tech stack
 
 - **React 19** + **TypeScript**
